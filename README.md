@@ -13,7 +13,7 @@ To use this select box component in your project, simply include the HTML, CSS, 
 
 ## Demo
 
-You can view the live demo [here](https://example.com/demo).
+You can view the live demo [here](longdp121.github.io/blob/main/web-ban-hang/shop.html).
 
 ## License
 
