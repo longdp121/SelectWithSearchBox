@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select with Search Box Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 50px;
+        background-color: #f7f7f7;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: #333;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 40px;
+        color: #555;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .description {
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+      }
+
+      .select-container {
+        position: relative;
+        width: 300px;
+        margin-bottom: 30px;
+      }
+
+      .select-box {
+        width: 100%;
+        position: relative;
+      }
+
+      .search-box {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 0;
+        font-size: 1rem;
+      }
+
+      .options-container {
+        position: absolute;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: #fff;
+        z-index: 100;
+        display: none;
+      }
+
+      .option {
+        padding: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .option:hover {
+        background-color: #f1f1f1;
+      }
+
+      .selected-option {
+        background-color: #e0e0e0;
+        margin-right: 5px;
+        padding: 5px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+
+      .remove-option {
+        margin-left: 10px;
+        color: #888;
+        cursor: pointer;
+      }
+
+      .remove-option:hover {
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Select with Search Box Demo</h1>
+      <p class="description">
+        This demo showcases a simple select component with a search box, allowing
+        users to filter options as they type. The select box can be easily
+        integrated into any web project. The component is built using HTML, CSS, and
+        vanilla JavaScript, making it lightweight and easy to customize.
+      </p>
+
+      <h2>Basic Example</h2>
+      <div class="select-container">
+        <input
+          type="text"
+          class="search-box"
+          placeholder="Search..."
+          onkeyup="filterOptions()"
+        />
+        <div class="select-box">
+          <div class="options-container" id="options-container">
+            <div class="option" onclick="selectOption(this)">Option 1</div>
+            <div class="option" onclick="selectOption(this)">Option 2</div>
+            <div class="option" onclick="selectOption(this)">Option 3</div>
+            <div class="option" onclick="selectOption(this)">Option 4</div>
+            <div class="option" onclick="selectOption(this)">Option 5</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>Multi-Selection Example</h2>
+      <p class="example-title">Country Selection with Removal</p>
+      <div class="select-container">
+        <div class="selected-options" id="selected-options"></div>
+        <input
+          type="text"
+          class="search-box"
+          placeholder="Search country..."
+          onkeyup="filterCountryOptions()"
+        />
+        <div class="select-box">
+          <div class="options-container" id="country-options-container">
+            <div class="option" onclick="selectCountryOption(this)">United States</div>
+            <div class="option" onclick="selectCountryOption(this)">Canada</div>
+            <div class="option" onclick="selectCountryOption(this)">United Kingdom</div>
+            <div class="option" onclick="selectCountryOption(this)">Australia</div>
+            <div class="option" onclick="selectCountryOption(this)">Germany</div>
+            <div class="option" onclick="selectCountryOption(this)">France</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Basic Example
+      const optionsContainer = document.getElementById("options-container");
+      const searchBox = document.querySelector(".search-box");
+
+      searchBox.addEventListener("focus", () => {
+        optionsContainer.style.display = "block";
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".select-container")) {
+          optionsContainer.style.display = "none";
+        }
+      });
+
+      function filterOptions() {
+        const filter = searchBox.value.toLowerCase();
+        const options = optionsContainer.querySelectorAll(".option");
+        options.forEach((option) => {
+          const text = option.textContent.toLowerCase();
+          option.style.display = text.includes(filter) ? "" : "none";
+        });
+      }
+
+      function selectOption(option) {
+        searchBox.value = option.textContent;
+        optionsContainer.style.display = "none";
+      }
+
+      // Multi-Selection Example
+      const countryOptionsContainer = document.getElementById(
+        "country-options-container"
+      );
+      const countrySearchBox = document.querySelector(
+        '.select-container input[placeholder="Search country..."]'
+      );
+      const selectedOptionsContainer = document.getElementById("selected-options");
+
+      countrySearchBox.addEventListener("focus", () => {
+        countryOptionsContainer.style.display = "block";
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".select-container")) {
+          countryOptionsContainer.style.display = "none";
+        }
+      });
+
+      function filterCountryOptions() {
+        const filter = countrySearchBox.value.toLowerCase();
+        const options = countryOptionsContainer.querySelectorAll(".option");
+        options.forEach((option) => {
+          const text = option.textContent.toLowerCase();
+          option.style.display = text.includes(filter) ? "" : "none";
+        });
+      }
+
+      function selectCountryOption(option) {
+        const selectedOption = document.createElement("span");
+        selectedOption.className = "selected-option";
+        selectedOption.textContent = option.textContent;
+
+        const removeButton = document.createElement("span");
+        removeButton.className = "remove-option";
+        removeButton.textContent = "x";
+        removeButton.onclick = () => {
+          selectedOptionsContainer.removeChild(selectedOption);
+          option.style.display = "";
+        };
+
+        selectedOption.appendChild(removeButton);
+        selectedOptionsContainer.appendChild(selectedOption);
+
+        option.style.display = "none";
+        countrySearchBox.value = "";
+      }
+    </script>
+  </body>
+</html>
